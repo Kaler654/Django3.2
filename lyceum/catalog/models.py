@@ -1,5 +1,5 @@
 from django.db import models
-from django.core import validators
+from django.contrib.auth.admin import User
 from .validators import validate_brilliant
 from core.models import BaseMixin, SlugMixin
 
@@ -12,6 +12,28 @@ class Item(BaseMixin):
     text = models.TextField(verbose_name="Описание",
                             help_text="Минимум два слова",
                             validators=[validate_brilliant])
+
+    category = models.ForeignKey(
+        verbose_name="Категория",
+        to="Category",
+        related_name="items",
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    tags = models.ManyToManyField(
+        verbose_name="Теги",
+        to="Tag",
+        related_name="items",
+    )
+
+    ratings = models.ManyToManyField(
+        verbose_name="Оценки",
+        to=User,
+        related_name="items",
+        through="rating.Rating",
+        through_fields=("item", "user")
+    )
 
     def __str__(self):
         return self.text
