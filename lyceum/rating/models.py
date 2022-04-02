@@ -33,6 +33,8 @@ class Rating(models.Model):
         verbose_name = "Оценка"
         verbose_name_plural = "Оценки"
         constraints = [
-            UniqueConstraint(fields=("item", "user",),
-                             name="unique_rating")
+            UniqueConstraint(
+                fields=("item", "user",),
+                name="unique_rating",
+            )
         ]
