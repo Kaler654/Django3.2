@@ -85,3 +85,5 @@ class Category(SlugMixin, BaseMixin):
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
+
+    objects = CategoryManager()

@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404
-from catalog.models import Item, Tag
+from catalog.models import Item, Category
 from random import shuffle
 
 
 def item_list(request):
     template = "catalog/item_list.html"
-    items = Item.objects.published_item_and_tags()
+    categories = Category.objects.published_category_and_items().order_by('weight')
     context = {
-        "items": items,
+        'categories': categories
     }
     return render(request, template, context=context)
 
