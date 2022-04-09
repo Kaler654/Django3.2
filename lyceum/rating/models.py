@@ -13,10 +13,7 @@ class Rating(models.Model):
         ("5", "Любовь"),
     )
     star = models.CharField(
-        verbose_name="Оценка",
-        max_length=1,
-        choices=choices,
-        default=0
+        verbose_name="Оценка", max_length=1, choices=choices, default=0
     )
     item = models.ForeignKey(
         verbose_name="Товар",
@@ -34,7 +31,10 @@ class Rating(models.Model):
         verbose_name_plural = "Оценки"
         constraints = [
             UniqueConstraint(
-                fields=("item", "user",),
+                fields=(
+                    "item",
+                    "user",
+                ),
                 name="unique_rating",
             )
         ]

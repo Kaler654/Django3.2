@@ -8,14 +8,19 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('rating', '0001_initial'),
-        ('catalog', '0003_auto_20220326_1238'),
+        ("rating", "0001_initial"),
+        ("catalog", "0003_auto_20220326_1238"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='item',
-            name='ratings',
-            field=models.ManyToManyField(related_name='items', through='rating.Rating', to=settings.AUTH_USER_MODEL, verbose_name='Оценки'),
+            model_name="item",
+            name="ratings",
+            field=models.ManyToManyField(
+                related_name="items",
+                through="rating.Rating",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Оценки",
+            ),
         ),
     ]

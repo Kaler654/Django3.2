@@ -7,5 +7,22 @@
 {% block content %}
 <main>
     <h1>Подробное описание товара</h1>
+    <div class="card" style="width: 18rem;">
+      <div class="card-header">
+        {{ item.name }}
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Категория: {{ item.category.name }}</li>
+        <li class="list-group-item">Описание: {{ item.text }}</li>
+        <li class="list-group-item">
+            Теги:
+            {% for tag in item.tags.all %}
+                <p>
+                    {{ tag.name }}
+                </p>
+            {% endfor %}
+        </li>
+      </ul>
+    </div>
 </main>
 {% endblock %}

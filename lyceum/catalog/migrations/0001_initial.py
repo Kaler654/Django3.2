@@ -8,21 +8,45 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Item',
+            name="Item",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Допустимая длина 150 символов', max_length=150, verbose_name='Название')),
-                ('text', models.TextField(help_text='Минимум два слова', validators=[catalog.validators.validate_brilliant], verbose_name='Описание')),
-                ('is_published', models.BooleanField(default=True, verbose_name='Опубликовано')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Допустимая длина 150 символов",
+                        max_length=150,
+                        verbose_name="Название",
+                    ),
+                ),
+                (
+                    "text",
+                    models.TextField(
+                        help_text="Минимум два слова",
+                        validators=[catalog.validators.validate_brilliant],
+                        verbose_name="Описание",
+                    ),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(default=True, verbose_name="Опубликовано"),
+                ),
             ],
             options={
-                'verbose_name': 'Товар',
-                'verbose_name_plural': 'Товары',
+                "verbose_name": "Товар",
+                "verbose_name_plural": "Товары",
             },
         ),
     ]

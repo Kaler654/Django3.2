@@ -6,24 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0001_initial'),
+        ("catalog", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Tag',
+            name="Tag",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('slug', models.SlugField(help_text='Допустимая длина 200 символов', max_length=200, unique=True, verbose_name='Название')),
-                ('is_published', models.BooleanField(default=True, verbose_name='Опубликовано')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "slug",
+                    models.SlugField(
+                        help_text="Допустимая длина 200 символов",
+                        max_length=200,
+                        unique=True,
+                        verbose_name="Название",
+                    ),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(default=True, verbose_name="Опубликовано"),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AlterField(
-            model_name='item',
-            name='is_published',
-            field=models.BooleanField(default=True, verbose_name='Опубликованно'),
+            model_name="item",
+            name="is_published",
+            field=models.BooleanField(default=True, verbose_name="Опубликованно"),
         ),
     ]
