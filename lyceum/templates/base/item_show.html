@@ -1,7 +1,6 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        {% for item in items %}
         <div class="col">
             <div class="card" style="width: 18rem;">
               <div class="card-body">
@@ -11,13 +10,10 @@
                         <span class="badge bg-success">{{ tag.name }}</span>
                     {% endfor %}
                 </h6>
-                <p class="card-text">{{ item.text|truncatechars:10 }}</p>
+                <p class="card-text">{{ item.text|truncatewords:10 }}</p>
               </div>
             </div>
         </div>
-        {% empty %}
-        <h3>Список пуст. Эй, админ, добавь инфы!</h3>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

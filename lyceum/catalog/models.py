@@ -1,18 +1,35 @@
-from django.db import models
 from django.contrib.auth.admin import User
-from .validators import validate_brilliant
-from core.models import BaseMixin, SlugMixin
+from django.db import models
 from django.db.models import Prefetch
+
+from core.models import BaseMixin, SlugMixin
+
+from .validators import validate_brilliant
 
 
 class ItemManager(models.Manager):
     def published_item_and_tags(self):
-        return self.filter(is_published=True).prefetch_related(
-            Prefetch(
-                "tags",
-                queryset=Tag.objects.filter(is_published=True),
+        return (
+            self.filter(is_published=True)
+            .prefetch_related(
+                Prefetch(
+                    "tags",
+                    queryset=Tag.objects.filter(is_published=True),
+                )
             )
-        ).only('name', 'text', 'tags__name')
+            .only("name", "text")
+        )
+
+    def published_items_and_categories(self):
+        return (
+            self.get_queryset()
+            .filter(is_published=True)
+            .select_related("category")
+            .only("name", "text", "category__name")
+            .prefetch_related(
+                Prefetch("tags", queryset=Tag.objects.filter(is_published=True))
+            )
+        )
 
 
 class Item(BaseMixin):
@@ -70,9 +87,13 @@ class Tag(SlugMixin, BaseMixin):
 
 class CategoryManager(models.Manager):
     def published_category_and_items(self):
-        return self.filter(is_published=True).prefetch_related(
-            Prefetch("items", queryset=Item.objects.published_item_and_tags())
-        ).only('name')
+        return (
+            self.filter(is_published=True)
+            .prefetch_related(
+                Prefetch("items", queryset=Item.objects.published_item_and_tags())
+            )
+            .only("name")
+        )
 
 
 class Category(SlugMixin, BaseMixin):
@@ -85,5 +106,6 @@ class Category(SlugMixin, BaseMixin):
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
+        ordering = ("weight",)
 
     objects = CategoryManager()

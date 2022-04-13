@@ -21,6 +21,30 @@
             </p>
         {% endfor %}
     </li>
+    <li class="list-group-item">
+      {% if stars.star__avg %}
+        <p>{{ stars.star__avg }} звезд / оценок {{ stars.star__count }}</p>
+      {% else %}
+        <p>Товар еще никто не оценил</p>
+      {% endif %}
+    </li>
   </ul>
+  {% if request.user.is_authenticated %}
+            <div>
+                <h4>Выберите свое отношение</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for i in star_dict %}
+                        <div class="form-check">
+                            <input type="radio" name="rate" value="{{ i.0 }}" id="radio{{ forloop.counter0 }}" {% if forloop.counter0 == user_star %} checked {% endif %}>
+                            <label>
+                                {{ i.1 }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn-sm btn-primary">Обновить</button>
+                </form>
+            </div>
+        {% endif %}
 </div>
 {% endblock %}

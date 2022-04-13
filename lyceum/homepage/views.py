@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from catalog.models import Item, Tag
 from random import shuffle
+
+from django.shortcuts import render
+
+from catalog.models import Item
 
 
 def home(request):
