@@ -16,19 +16,16 @@ def item_list(request):
 def item_detail(request, catalog_id):
     template = "catalog/item_detail.html"
     items = Item.objects.published_item_and_tags()
-    item = get_object_or_404(Item, pk=catalog_id)
+    item = get_object_or_404(items, pk=catalog_id)
     if request.method == "GET":
         star_list = Rating.choices
-        stars = Rating.objects.filter(item=item, star__in=[1, 2, 3, 4, 5]).aggregate(
-            Avg("star"), Count("star")
-        )
+        stars = item.item_stars.exclude(star=0).aggregate(Avg("star"), Count("star"))
+
+        user_star = 0
         if request.user.is_authenticated:
-            try:
-                user_star = Rating.objects.get(item=item, user=request.user).star
-            except Rating.DoesNotExist:
-                user_star = 0
-        else:
-            user_star = 0
+            user_rate = Rating.objects.filter(item=item, user=request.user).first()
+            if user_rate:
+                user_star = user_rate.star
 
         context = {
             "item": item,
@@ -39,19 +36,11 @@ def item_detail(request, catalog_id):
         return render(request, template, context=context)
 
     elif request.method == "POST":
-        if (
-            request.POST["rate"] in ["0", "1", "2", "3", "4", "5"]
-            and request.user.is_authenticated
-        ):
-            obj, created = Rating.objects.get_or_create(
-                user=request.user,
-                item=item,
-                defaults={
-                    "item": item,
-                    "user": request.user,
-                },
-            )
-
-            obj.star = int(request.POST["rate"])
-            obj.save()
+        if "rate" in request.POST and request.POST["rate"].isdigit():
+            rate = int(request.POST["rate"])
+            rating_choices = list(map(lambda x: x[0], Rating.choices))
+            if rate in rating_choices and request.user.is_authenticated:
+                Rating.objects.update_or_create(
+                    item=item, user=request.user, defaults={"star": rate}
+                )
         return redirect("item_detail", catalog_id=catalog_id)
