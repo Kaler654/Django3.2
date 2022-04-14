@@ -8,6 +8,7 @@ from django import forms
 
 class FeedbackForm(forms.Form):
     choices = Rating.choices
+    rate = forms.CharField(label="rate", widget=forms.RadioSelect(choices=choices))
 
 
 def item_list(request):
@@ -26,7 +27,7 @@ def item_detail(request, catalog_id):
 
     if request.method == "POST" and form.is_valid():
         if "rate" in request.POST and request.POST["rate"].isdigit():
-            rate = int(request.POST["rate"])
+            rate = int(request.POST["rate"][0])
             rating_choices = list(map(lambda x: x[0], Rating.choices))
             if rate in rating_choices and request.user.is_authenticated:
                 Rating.objects.update_or_create(
@@ -48,5 +49,6 @@ def item_detail(request, catalog_id):
         "star_dict": star_list,
         "stars": stars,
         "user_star": user_star,
+        "form": form,
     }
     return render(request, template, context=context)
